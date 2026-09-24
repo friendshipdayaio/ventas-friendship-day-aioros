@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Friendship Day Aioros '26</title>
+  <style>
+    :root {
+      --bg-color: #f7ebe8;
+      --primary-color: #6b1d2f;
+      --accent-color: #e5989b;
+      --card-bg: #ffffff;
+      --text-color: #4a3e3d;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 750px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+
+    /* Imagen de cabecera / Banner */
+    .banner-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    h1, h2, h3 {
+      text-align: center;
+      color: var(--primary-color);
+    }
+
+    .header-subtitle {
+      text-align: center;
+      font-size: 1.05em;
+      margin-top: -10px;
+      margin-bottom: 25px;
+      color: #666;
+    }
+
+    /* Selección de flores */
+    .flower-selection {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .flower-card {
+      border: 2px solid #f0d5d5;
+      border-radius: 10px;
+      padding: 12px;
+      text-align: center;
+      background: #faf4f4;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Imagen dentro de la tarjeta de flor */
+    .flower-card img {
+      width: 100%;
+      height: 110px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+
+    .flower-card h4 {
+      margin: 5px 0;
+      color: var(--primary-color);
+      font-size: 1em;
+    }
+
+    .flower-card .price {
+      font-weight: bold;
+      color: #b55252;
+      margin-bottom: 8px;
+    }
+
+    .flower-card input[type="number"] {
+      width: 60px;
+      padding: 5px;
+      text-align: center;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1em;
+    }
+
+    /* Formularios dinámicos para cada flor */
+    .cards-container {
+      margin-top: 20px;
+    }
+
+    .item-card-form {
+      background: #fff5f5;
+      border-left: 5px solid var(--primary-color);
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+    }
+
+    .item-card-form h4 {
+      margin-top: 0;
+      color: var(--primary-color);
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 4px;
+      font-size: 0.9em;
+    }
+
+    .form-group input, .form-group textarea {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-family: inherit;
+    }
+
+    /* Sección comprador y comprobante */
+    .checkout-section {
+      margin-top: 30px;
+      border-top: 2px dashed #e0c0c0;
+      padding-top: 20px;
+    }
+
+    .total-box {
+      font-size: 1.3em;
+      font-weight: bold;
+      text-align: right;
+      color: var(--primary-color);
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      font-size: 1em;
+      border-radius: 25px;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #521422;
+    }
+
+    .btn:disabled {
+      background-color: #999;
+      cursor: not-allowed;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* Pantalla de agradecimiento */
+    .thank-you-box {
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .thank-you-box h2 {
+      font-size: 2em;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container" id="main-container">
+    
+    <img src="https://github.com/ACLiyah15/ventas-friendship-day-aioros/blob/main/Friendship%20Day.png" alt="Friendship Day" class="banner-img">
+
+    <h1>Friendship Day Aioros '26 🌹</h1>
+    <p class="header-subtitle">¡Envía un detalle especial a tus amigos y compañeros!</p>
+
+    <!-- Paso 1: Selección de cantidad de flores con imágenes -->
+    <h2>1. Selecciona tus productos</h2>
+    <div class="flower-selection">
+      
+      <div class="flower-card">
+        <h4>Clavel</h4>
+        <div class="price">$1.00</div>
+        <div>
+          <label>Cant:</label>
+          <input type="number" id="qty-clavel" min="0" value="0" onchange="generateForms()">
+        </div>
+      </div>
+
+      <div class="flower-card">
+        <h4>Rosa</h4>
+        <div class="price">$2.00</div>
+        <div>
+          <label>Cant:</label>
+          <input type="number" id="qty-rosa" min="0" value="0" onchange="generateForms()">
+        </div>
+      </div>
+
+      <div class="flower-card">
+        <h4>Crisantemo</h4>
+        <div class="price">$1.50</div>
+        <div>
+          <label>Cant:</label>
+          <input type="number" id="qty-crisantemo" min="0" value="0" onchange="generateForms()">
+        </div>
+      </div>
+
+      <div class="flower-card">
+        <h4>Dalia Col.</h4>
+        <div class="price">$2.50</div>
+        <div>
+          <label>Cant:</label>
+          <input type="number" id="qty-dalia" min="0" value="0" onchange="generateForms()">
+        </div>
+      </div>
+
+      <div class="flower-card">
+        <h4>Arreglo</h4>
+        <div class="price">$12.00</div>
+        <div>
+          <label>Cant:</label>
+          <input type="number" id="qty-arreglo" min="0" value="0" onchange="generateForms()">
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Paso 2: Datos de cada flor / tarjeta -->
+    <div id="details-section" class="hidden">
+      <h2>2. Mensaje para cada ítem</h2>
+      <div id="cards-container"></div>
+    </div>
+
+    <!-- Paso 3: Datos del comprador y comprobante -->
+    <div id="checkout-section" class="checkout-section hidden">
+      <h2>3. Datos del Comprador</h2>
+      
+      <div class="form-group">
+        <label for="comp-nombre">Nombre y apellido *</label>
+        <input type="text" id="comp-nombre" required placeholder="Tu nombre completo">
+      </div>
+
+      <div class="form-group">
+        <label for="comp-telefono">Número de teléfono *</label>
+        <input type="tel" id="comp-telefono" required placeholder="Ej. 6000-0000">
+      </div>
+
+      <div class="form-group">
+        <label for="comp-salon">Salón * (Solo si eres estudiante)</label>
+        <input type="text" id="comp-salon" placeholder="Ej. 12°B / Salón 104">
+      </div>
+
+      <h2>4. Comprobante de pago</h2>
+      <div class="form-group">
+        <label for="comprobante-file">Adjuntar comprobante (Imagen o PDF) *</label>
+        <input type="file" id="comprobante-file" accept="image/*,application/pdf" required>
+      </div>
+
+      <div class="total-box">
+        Total a pagar: $<span id="total-amount">0.00</span>
+      </div>
+
+      <button class="btn" onclick="submitOrder()">Enviar Pedido 🚀</button>
+    </div>
+  </div>
+
+  <!-- Pantalla de Gracias -->
+  <div class="container hidden" id="thank-you-container">
+    <div class="thank-you-box">
+      <h2>¡Gracias por tu pedido! ❤️</h2>
+      <p>Hemos recibido tus datos y tu comprobante correctamente.</p>
+      <p>Nos encargaremos de entregar tus flores y mensajes en el Friendship Day.</p>
+
+      <button class="btn" style="margin-top: 20px; max-width: 200px;" onclick="location.reload()">Hacer otro pedido</button>
+    </div>
+  </div>
+
+  <script>
+    // 1. REEMPLAZA ESTA URL CON TU URL REAL DE DESPLIEGUE DE APPS SCRIPT
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxAoBKP8cLDfRVDCM1iBIXULhNb9ZR0VgZlzpgstLBkJhJ2Oq3pqRoqpf9KlZ_a3ITy/exec";
+
+    const PRICES = {
+      clavel: 1.00,
+      rosa: 2.00,
+      crisantemo: 1.50,
+      dalia: 2.50,
+      arreglo: 12.00
+    };
+
+    function generateForms() {
+      const qClavel = parseInt(document.getElementById('qty-clavel').value) || 0;
+      const qRosa = parseInt(document.getElementById('qty-rosa').value) || 0;
+      const qCrisantemo = parseInt(document.getElementById('qty-crisantemo').value) || 0;
+      const qDalia = parseInt(document.getElementById('qty-dalia').value) || 0;
+      const qArreglo = parseInt(document.getElementById('qty-arreglo').value) || 0;
+
+      const totalItems = qClavel + qRosa + qCrisantemo + qDalia + qArreglo;
+      const container = document.getElementById('cards-container');
+      const detailsSection = document.getElementById('details-section');
+      const checkoutSection = document.getElementById('checkout-section');
+
+      container.innerHTML = '';
+
+      if (totalItems === 0) {
+        detailsSection.classList.add('hidden');
+        checkoutSection.classList.add('hidden');
+        return;
+      }
+
+      detailsSection.classList.remove('hidden');
+      checkoutSection.classList.remove('hidden');
+
+      for (let i = 1; i <= qClavel; i++) container.appendChild(createFlowerForm('Clavel', i));
+      for (let i = 1; i <= qRosa; i++) container.appendChild(createFlowerForm('Rosa', i));
+      for (let i = 1; i <= qCrisantemo; i++) container.appendChild(createFlowerForm('Crisantemo', i));
+      for (let i = 1; i <= qDalia; i++) container.appendChild(createFlowerForm('Dalia Colombiana', i));
+      for (let i = 1; i <= qArreglo; i++) container.appendChild(createFlowerForm('Arreglo Floral', i));
+
+      const total = (qClavel * PRICES.clavel) + 
+                    (qRosa * PRICES.rosa) + 
+                    (qCrisantemo * PRICES.crisantemo) + 
+                    (qDalia * PRICES.dalia) + 
+                    (qArreglo * PRICES.arreglo);
+
+      document.getElementById('total-amount').innerText = total.toFixed(2);
+    }
+
+    function createFlowerForm(type, index) {
+      const div = document.createElement('div');
+      div.className = 'item-card-form';
+      div.dataset.type = type;
+      
+      div.innerHTML = `
+        <h4>Ítem #${index} - ${type}</h4>
+        <div class="form-group">
+          <label>De:</label>
+          <input type="text" class="field-de" placeholder="Nombre de quien envía">
+        </div>
+        <div class="form-group">
+          <label>Para:</label>
+          <input type="text" class="field-para" placeholder="Nombre del destinatario">
+        </div>
+        <div class="form-group">
+          <label>Salón:</label>
+          <input type="text" class="field-salon" placeholder="Salón o aula del destinatario">
+        </div>
+        <div class="form-group">
+          <label>Mensaje:</label>
+          <textarea class="field-mensaje" rows="2" placeholder="Escribe tu mensaje aquí..."></textarea>
+        </div>
+      `;
+      return div;
+    }
+
+    function getBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+      });
+    }
+
+    async function submitOrder() {
+      const compradorNombre = document.getElementById('comp-nombre').value;
+      const compradorTelefono = document.getElementById('comp-telefono').value;
+      const compradorSalon = document.getElementById('comp-salon').value;
+      const fileInput = document.getElementById('comprobante-file');
+
+      if (!compradorNombre || !compradorTelefono) {
+        alert("Por favor completa los campos del comprador (Nombre y Teléfono).");
+        return;
+      }
+
+      if (fileInput.files.length === 0) {
+        alert("Por favor adjunta tu comprobante de pago.");
+        return;
+      }
+
+      const file = fileInput.files[0];
+      let archivoBase64 = "";
+      try {
+        archivoBase64 = await getBase64(file);
+      } catch (e) {
+        alert("Error al procesar el archivo del comprobante.");
+        return;
+      }
+
+      const flowerForms = document.querySelectorAll('.item-card-form');
+      const pedidos = [];
+
+      flowerForms.forEach(form => {
+        pedidos.push({
+          tipo: form.dataset.type,
+          de: form.querySelector('.field-de').value || 'Anónimo',
+          para: form.querySelector('.field-para').value || 'N/A',
+          salon: form.querySelector('.field-salon').value || 'N/A',
+          mensaje: form.querySelector('.field-mensaje').value || 'Sin mensaje'
+        });
+      });
+
+      const total = document.getElementById('total-amount').innerText;
+
+      const payload = {
+        compradorNombre,
+        compradorTelefono,
+        compradorSalon,
+        pedidos,
+        total,
+        nombreArchivo: file.name,
+        mimeType: file.type,
+        archivoBase64: archivoBase64
+      };
+
+      const btn = document.querySelector('#checkout-section .btn');
+      btn.disabled = true;
+      btn.innerText = "Enviando pedido...";
+
+      try {
+        await fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        document.getElementById('main-container').classList.add('hidden');
+        document.getElementById('thank-you-container').classList.remove('hidden');
+
+      } catch (error) {
+        alert("Ocurrió un error al enviar el pedido. Intenta nuevamente.");
+        console.error(error);
+        btn.disabled = false;
+        btn.innerText = "Enviar Pedido 🚀";
+      }
+    }
+  </script>
+</body>
+</html>
