@@ -121,6 +121,14 @@
       color: var(--primary-color);
     }
 
+    /* Grid para colocar De, Para y Salón en una sola fila */
+    .fields-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
     .form-group {
       margin-bottom: 12px;
     }
@@ -139,6 +147,22 @@
       border: 1px solid #ccc;
       border-radius: 6px;
       font-family: inherit;
+    }
+
+    /* Caja de información de pago */
+    .payment-info-box {
+      background-color: #fdf2f4;
+      border: 1px solid #f0d5d5;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 20px;
+      text-align: center;
+      color: var(--primary-color);
+    }
+
+    .payment-info-box p {
+      margin: 4px 0;
+      font-size: 1.05em;
     }
 
     /* Sección comprador y comprobante */
@@ -268,16 +292,28 @@
       </div>
 
       <div class="form-group">
-        <label for="comp-telefono">Número de teléfono *</label>
-        <input type="tel" id="comp-telefono" required placeholder="Ej. 6000-0000">
+        <label for="comp-telefono">Número de teléfono * (Panamá)</label>
+        <input type="tel" id="comp-telefono" required placeholder="Ej. 6161-8877">
       </div>
 
       <div class="form-group">
-        <label for="comp-salon">Salón * (Solo si eres estudiante)</label>
+        <label for="comp-salon">Salón (Opcional si eres estudiante)</label>
         <input type="text" id="comp-salon" placeholder="Ej. 12°B / Salón 104">
       </div>
 
       <h2>4. Comprobante de pago</h2>
+
+      <!-- Información de Pago Yappy / Transferencia -->
+      <div class="payment-info-box">
+        <p><strong>Yappy:</strong></p>
+        <p>6161-8877</p>
+        <p>lala</p>
+        <br>
+        <p><strong>Transferencia:</strong></p>
+        <p>111111</p>
+        <p>chuchu</p>
+      </div>
+
       <div class="form-group">
         <label for="comprobante-file">Adjuntar comprobante (Imagen o PDF) *</label>
         <input type="file" id="comprobante-file" accept="image/*,application/pdf" required>
@@ -359,17 +395,19 @@
       
       div.innerHTML = `
         <h4>Ítem #${index} - ${type}</h4>
-        <div class="form-group">
-          <label>De:</label>
-          <input type="text" class="field-de" placeholder="Nombre de quien envía">
-        </div>
-        <div class="form-group">
-          <label>Para:</label>
-          <input type="text" class="field-para" placeholder="Nombre del destinatario">
-        </div>
-        <div class="form-group">
-          <label>Salón:</label>
-          <input type="text" class="field-salon" placeholder="Salón o aula del destinatario">
+        <div class="fields-row">
+          <div class="form-group">
+            <label>De: *</label>
+            <input type="text" class="field-de" required placeholder="Nombre de quien envía">
+          </div>
+          <div class="form-group">
+            <label>Para: *</label>
+            <input type="text" class="field-para" required placeholder="Nombre del destinatario">
+          </div>
+          <div class="form-group">
+            <label>Salón: *</label>
+            <input type="text" class="field-salon" required placeholder="Salón o aula">
+          </div>
         </div>
         <div class="form-group">
           <label>Mensaje:</label>
@@ -389,13 +427,40 @@
     }
 
     async function submitOrder() {
-      const compradorNombre = document.getElementById('comp-nombre').value;
-      const compradorTelefono = document.getElementById('comp-telefono').value;
-      const compradorSalon = document.getElementById('comp-salon').value;
+      const compradorNombre = document.getElementById('comp-nombre').value.trim();
+      const compradorTelefono = document.getElementById('comp-telefono').value.trim();
+      const compradorSalon = document.getElementById('comp-salon').value.trim();
       const fileInput = document.getElementById('comprobante-file');
 
-      if (!compradorNombre || !compradorTelefono) {
-        alert("Por favor completa los campos del comprador (Nombre y Teléfono).");
+      // Validar datos básicos del comprador
+      if (!compradorNombre) {
+        alert("Por favor ingresa tu Nombre y Apellido.");
+        return;
+      }
+
+      // Validar formato de teléfono de Panamá (8 dígitos opcional con guión)
+      const paPhoneRegex = /^(\+?507)?\s?[6238]\d{3}[- ]?\d{4}$/;
+      if (!paPhoneRegex.test(compradorTelefono)) {
+        alert("Por favor ingresa un número de teléfono válido de Panamá (ej. 6161-8877 o 61618877).");
+        return;
+      }
+
+      // Validar campos obligatorios en los ítems
+      const flowerForms = document.querySelectorAll('.item-card-form');
+      let missingItemField = false;
+
+      flowerForms.forEach((form, idx) => {
+        const de = form.querySelector('.field-de').value.trim();
+        const para = form.querySelector('.field-para').value.trim();
+        const salon = form.querySelector('.field-salon').value.trim();
+
+        if (!de || !para || !salon) {
+          missingItemField = true;
+        }
+      });
+
+      if (missingItemField) {
+        alert("Por favor completa los campos 'De', 'Para' y 'Salón' en todos los ítems seleccionados.");
         return;
       }
 
@@ -413,16 +478,14 @@
         return;
       }
 
-      const flowerForms = document.querySelectorAll('.item-card-form');
       const pedidos = [];
-
       flowerForms.forEach(form => {
         pedidos.push({
           tipo: form.dataset.type,
-          de: form.querySelector('.field-de').value || 'Anónimo',
-          para: form.querySelector('.field-para').value || 'N/A',
-          salon: form.querySelector('.field-salon').value || 'N/A',
-          mensaje: form.querySelector('.field-mensaje').value || 'Sin mensaje'
+          de: form.querySelector('.field-de').value.trim(),
+          para: form.querySelector('.field-para').value.trim(),
+          salon: form.querySelector('.field-salon').value.trim(),
+          mensaje: form.querySelector('.field-mensaje').value.trim() || 'Sin mensaje'
         });
       });
 
@@ -431,7 +494,7 @@
       const payload = {
         compradorNombre,
         compradorTelefono,
-        compradorSalon,
+        compradorSalon: compradorSalon || 'N/A',
         pedidos,
         total,
         nombreArchivo: file.name,
