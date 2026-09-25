@@ -55,31 +55,25 @@
 
     /* Selección de flores */
     .flower-selection {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 15px;
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 10px;
       margin-bottom: 25px;
+      overflow-x: auto; 
     }
 
     .flower-card {
       border: 2px solid #f0d5d5;
       border-radius: 10px;
-      padding: 12px;
+      padding: 10px 5px;
       text-align: center;
       background: #faf4f4;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
-    }
-
-    /* Imagen dentro de la tarjeta de flor */
-    .flower-card img {
-      width: 100%;
-      height: 110px;
-      object-fit: cover;
-      border-radius: 8px;
-      margin-bottom: 8px;
+      flex: 1; 
+      min-width: 0; 
     }
 
     .flower-card h4 {
@@ -220,7 +214,7 @@
 
   <div class="container" id="main-container">
     
-    <img src="https://github.com/ACLiyah15/ventas-friendship-day-aioros/blob/main/Friendship%20Day.png" alt="Friendship Day" class="banner-img">
+    <img src="https://github.com/ACLiyah15/ventas-friendship-day-aioros/blob/main/Friendship%20Day.png?raw=true" alt="Friendship Day" class="banner-img">
 
     <h1>Friendship Day Aioros '26 🌹</h1>
     <p class="header-subtitle">¡Envía un detalle especial a tus amigos y compañeros!</p>
