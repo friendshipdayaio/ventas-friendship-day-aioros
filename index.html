@@ -18,50 +18,57 @@
       background-color: var(--bg-color);
       color: var(--text-color);
       margin: 0;
-      padding: 20px;
+      padding: 12px; /* Reducido para pantallas pequeñas */
     }
 
     .container {
       max-width: 750px;
       margin: 0 auto;
       background: var(--card-bg);
-      padding: 25px;
+      padding: 20px;
       border-radius: 15px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-      overflow: hidden;
+      box-sizing: border-box;
     }
-
 
     .banner-img {
       width: 100%;
       height: auto;
-      max-height: 400px; /* Ajusta este valor si prefieres que no sea tan alta en PC */
+      max-height: 400px;
       object-fit: contain;
       border-radius: 10px;
       margin-bottom: 20px;
       display: block;
     }
 
-    h1, h2, h3 {
+    h1 {
+      font-size: 1.6em;
+      text-align: center;
+      color: var(--primary-color);
+      margin-top: 0;
+    }
+
+    h2 {
+      font-size: 1.3em;
       text-align: center;
       color: var(--primary-color);
     }
 
     .header-subtitle {
       text-align: center;
-      font-size: 1.05em;
-      margin-top: -10px;
+      font-size: 1em;
+      margin-top: -5px;
       margin-bottom: 25px;
       color: #666;
     }
 
-    /* Selección de flores */
+    /* Selección de flores responsiva */
     .flower-selection {
       display: flex;
-      flex-wrap: nowrap;
+      flex-wrap: wrap; /* Permite adaptarse a móviles */
       gap: 10px;
       margin-bottom: 25px;
-      overflow-x: auto; 
+      justify-content: center;
     }
 
     .flower-card {
@@ -74,14 +81,15 @@
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
-      flex: 1; 
-      min-width: 0; 
+      flex: 1 1 calc(33.333% - 10px); /* 3 por fila en tablets/móviles grandes */
+      min-width: 90px; 
+      box-sizing: border-box;
     }
 
     .flower-card h4 {
       margin: 5px 0;
       color: var(--primary-color);
-      font-size: 1em;
+      font-size: 0.95em;
     }
 
     .flower-card .price {
@@ -91,7 +99,7 @@
     }
 
     .flower-card input[type="number"] {
-      width: 60px;
+      width: 50px;
       padding: 5px;
       text-align: center;
       border: 1px solid #ccc;
@@ -117,10 +125,10 @@
       color: var(--primary-color);
     }
 
-    /* Grid para colocar De, Para y Salón en una sola fila */
+    /* Grid adaptable para De, Para y Salón */
     .fields-row {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 10px;
       margin-bottom: 12px;
     }
@@ -138,11 +146,12 @@
 
     .form-group input, .form-group textarea {
       width: 100%;
-      padding: 8px;
+      padding: 10px;
       box-sizing: border-box;
       border: 1px solid #ccc;
       border-radius: 6px;
       font-family: inherit;
+      font-size: 16px; /* Evita el zoom automático en Safari iOS */
     }
 
     /* Caja de información de pago */
@@ -158,7 +167,7 @@
 
     .payment-info-box p {
       margin: 4px 0;
-      font-size: 1.05em;
+      font-size: 1em;
     }
 
     /* Sección comprador y comprobante */
@@ -169,7 +178,7 @@
     }
 
     .total-box {
-      font-size: 1.3em;
+      font-size: 1.2em;
       font-weight: bold;
       text-align: right;
       color: var(--primary-color);
@@ -180,12 +189,13 @@
       background-color: var(--primary-color);
       color: white;
       border: none;
-      padding: 12px 25px;
+      padding: 14px 25px;
       font-size: 1em;
       border-radius: 25px;
       cursor: pointer;
       width: 100%;
       transition: background 0.3s;
+      font-weight: bold;
     }
 
     .btn:hover {
@@ -204,11 +214,30 @@
     /* Pantalla de agradecimiento */
     .thank-you-box {
       text-align: center;
-      padding: 40px 20px;
+      padding: 30px 10px;
     }
 
     .thank-you-box h2 {
-      font-size: 2em;
+      font-size: 1.8em;
+    }
+
+    /* Media Query específica para celulares */
+    @media (max-width: 480px) {
+      body {
+        padding: 8px;
+      }
+
+      .container {
+        padding: 15px;
+      }
+
+      .flower-card {
+        flex: 1 1 calc(50% - 10px); /* 2 tarjetas por fila en celular */
+      }
+
+      .total-box {
+        text-align: center;
+      }
     }
   </style>
 </head>
@@ -221,7 +250,7 @@
     <h1>Friendship Day Aioros '26 🌹</h1>
     <p class="header-subtitle">¡Envía un detalle especial a tus amigos y compañeros!</p>
 
-    <!-- Paso 1: Selección de cantidad de flores con imágenes -->
+    <!-- Paso 1: Selección de cantidad de flores -->
     <h2>1. Selecciona tus productos</h2>
     <div class="flower-selection">
       
@@ -336,7 +365,6 @@
   </div>
 
   <script>
-    
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxB29FXWyDHmqgJdRUmTy9DOvC13C7kiKIe18lnca_52XX4ghPwgNWqLsOuhRh44SgP/exec";
 
     const PRICES = {
@@ -429,24 +457,21 @@
       const compradorSalon = document.getElementById('comp-salon').value.trim();
       const fileInput = document.getElementById('comprobante-file');
 
-      // Validar datos básicos del comprador
       if (!compradorNombre) {
         alert("Por favor ingresa tu Nombre y Apellido.");
         return;
       }
 
-      // Validar formato de teléfono de Panamá (8 dígitos opcional con guión)
       const paPhoneRegex = /^(\+?507)?\s?[6238]\d{3}[- ]?\d{4}$/;
       if (!paPhoneRegex.test(compradorTelefono)) {
         alert("Por favor ingresa un número de teléfono válido de Panamá (ej. 6161-8877 o 61618877).");
         return;
       }
 
-      // Validar campos obligatorios en los ítems
       const flowerForms = document.querySelectorAll('.item-card-form');
       let missingItemField = false;
 
-      flowerForms.forEach((form, idx) => {
+      flowerForms.forEach((form) => {
         const de = form.querySelector('.field-de').value.trim();
         const para = form.querySelector('.field-para').value.trim();
         const salon = form.querySelector('.field-salon').value.trim();
